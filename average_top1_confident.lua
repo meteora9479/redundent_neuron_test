@@ -28,6 +28,25 @@ function preprocess(im, img_mean)
   return im4 - image.scale(img_mean, 224, 224, 'bilinear')
 end
 
+-- Lua implementation of PHP scandir function
+function scandir(directory)
+    local i, t, popen = 0, {}, io.popen
+    for filename in popen('ls -a "'..directory..'"'):lines() do
+        if filename:match "%.png$" then
+            i = i + 1
+            t[i] = filename
+        end
+    end
+    return t, i
+end
+
+
+fileDir = '/usr/local/data/imagenet/train'
+fileList, total_files = scandir( fileDir )
+
+
+
+
 -- Setting up networks 
 print '==> Loading network'
 
@@ -41,9 +60,9 @@ print '==> Loading synsets'
 synset_words = load_synset()
 
 print '==> Loading image and imagenet mean'
---image_name = 'Goldfish3.jpg'
+image_name = 'Goldfish3.jpg'
 --image_name = 'lena.jpg'
-image_name='people2.jpg'
+--image_name='people2.jpg'
 img_mean_name = 'ilsvrc_2012_mean.t7'
 
 im = image.load(image_name)
